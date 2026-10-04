@@ -21,28 +21,6 @@ class Company(models.Model):
         return self.name
 
 
-class Resume(models.Model):
-    user = models.OneToOneField(
-        User, 
-        on_delete=models.CASCADE, 
-        related_name='resume',
-        verbose_name="Foydalanuvchi"
-    )
-    title = models.CharField(max_length=255, verbose_name="Kasb unvoni (Masalan: Python Backend Developer)")
-    bio = models.TextField(blank=True, verbose_name="O'zi haqida qisqacha")
-    skills = models.CharField(
-        max_length=255, 
-        help_text="Vergul bilan ajratib yozing (masalan: Python, Django, PostgreSQL)",
-        verbose_name="Ko'nikmalar"
-    )
-    experience_years = models.PositiveIntegerField(default=0, verbose_name="Tajriba (yillar)")
-    file = models.FileField(upload_to='resumes/', blank=True, null=True, verbose_name="PDF Rezyume fayli")
-    updated_at = models.DateTimeField(auto_now=True)
-
-    def __str__(self):
-        return f"{self.user.username} - {self.title}"
-
-
 class Job(models.Model):
     company = models.ForeignKey(
         Company, 

@@ -28,15 +28,21 @@
                         <a class="nav-link fw-medium" href="#">Vakansiyalar</a>
                     </li>
                     {% if user.is_authenticated %}
-                        <li class="nav-item">
-                            
-                            <span class="user-badge me-2">
-                                <span>🐝</span> {{ user.username }}
-                            </span>
-                        </li>
-                        <li class="nav-item">
-                            <a class="btn btn-outline-light btn-sm px-3" href="{% url 'accounts:logout' %}">Chiqish</a>
-                        </li>
+    <li class="nav-item d-flex align-items-center">
+        <!-- User Badge bosilganda ham dashboard'ga o'tadi -->
+        <a href="{% url 'accounts:dashboard' %}" class="user-badge text-decoration-none me-2">
+            <span>🐝</span> {{ user.username }}
+        </a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link fw-semibold" href="{% url 'accounts:dashboard' %}">
+            <i class="bi bi-person-circle"></i> Profilim
+        </a>
+    </li>
+    <li class="nav-item">
+        <a class="btn btn-outline-light btn-sm px-3 ms-lg-2" href="{% url 'accounts:logout' %}">Chiqish</a>
+    </li>
+
                     {% else %}
                         <li class="nav-item">
                             <a class="nav-link fw-medium" href="{% url 'accounts:login' %}">Kirish</a>

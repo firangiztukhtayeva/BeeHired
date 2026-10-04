@@ -3,6 +3,9 @@ from django.contrib.auth import login, logout
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib import messages
 from .forms import CustomUserCreationForm
+from django.contrib.auth.decorators import login_required
+from .models import Resume
+from .forms import ResumeForm, ProfileUpdateForm
 
 def register_view(request):
     if request.user.is_authenticated:
@@ -42,3 +45,37 @@ def logout_view(request):
     logout(request)
     messages.info(request, "Tizimdan muvaffaqiyatli chiqdingiz.")
     return redirect('home')
+
+
+
+
+@login_required
+def profile_dashboard(request):
+    # Foydalanuvchida rezyume bor-yo'qligini tekshiramiz yoki yaratamiz
+    resume, created = Resume.objects.get_or_create(
+        user=request.user,
+        defaults={'full_name': request.user.username, 'title': 'Dasturchi / Mutaxassis'}
+    )
+    return render(request, 'accounts/dashboard.html', {'resume': resume})
+
+@login_required
+def edit_resume(request):
+    resume, created = Resume.objects.get_or_create(user=request.user)
+    
+    if request.method == 'POST':
+        resume_form = ResumeForm(request.POST, request.FILES, instance=resume)
+        profile_form = ProfileUpdateForm(request.POST, request.FILES, instance=request.user)
+        
+        if resume_form.is_valid() and profile_form.is_valid():
+            resume_form.save()
+            profile_form.save()
+            messages.success(request, "Profil va rezyume ma'lumotlari muvaffaqiyatli saqlandi!")
+            return redirect('accounts:dashboard')
+    else:
+        resume_form = ResumeForm(instance=resume)
+        profile_form = ProfileUpdateForm(instance=request.user)
+
+    return render(request, 'accounts/edit_resume.html', {
+        'form': resume_form,
+        'profile_form': profile_form
+    })

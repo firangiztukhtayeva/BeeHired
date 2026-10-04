@@ -1,0 +1,80 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container my-5" style="max-width: 800px;">
+    <div class="card border-0 shadow-sm rounded-4 p-4 bg-white">
+        <h3 class="fw-bold mb-4 text-dark">
+            <i class="bi bi-file-earmark-person text-warning me-2"></i> Profil va Rezyumeni tahrirlash
+        </h3>
+        
+        <!-- 1. Enctype atributi fayl va rasmlar yuklanishi uchun shart -->
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            
+            <!-- 2. Profil rasmi (Avatar) qismi -->
+            <div class="card p-3 bg-light border-0 rounded-3 mb-4 text-center">
+                <label class="form-label fw-bold d-block text-start mb-2">Profil rasmi</label>
+                
+                {% if user.avatar %}
+                    <div class="mb-3">
+                        <img src="{{ user.avatar.url }}" alt="Profil rasmi" class="rounded-circle shadow-sm" style="width: 110px; height: 110px; object-fit: cover;">
+                    </div>
+                {% endif %}
+                
+                {{ profile_form.avatar }}
+            </div>
+
+            <hr class="my-4">
+
+            <!-- 3. Rezyume maydonlari -->
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold">To'liq ism-sharif</label>
+                    {{ form.full_name }}
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold">Kasb / Sohangiz</label>
+                    {{ form.title }}
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold">Telefon</label>
+                    {{ form.phone }}
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold">Yashash manzili</label>
+                    {{ form.location }}
+                </div>
+                <div class="col-12">
+                    <label class="form-label fw-semibold">O'zingiz haqida qisqacha</label>
+                    {{ form.bio }}
+                </div>
+                <div class="col-12">
+                    <label class="form-label fw-semibold">Ko'nikmalar</label>
+                    {{ form.skills }}
+                </div>
+                <div class="col-12">
+                    <label class="form-label fw-semibold">Ta'lim</label>
+                    {{ form.education }}
+                </div>
+                <div class="col-12">
+                    <label class="form-label fw-semibold">Ish tajribasi</label>
+                    {{ form.experience }}
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold">GitHub havolasi</label>
+                    {{ form.github_link }}
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold">LinkedIn havolasi</label>
+                    {{ form.linkedin_link }}
+                </div>
+            </div>
+
+            <div class="d-flex justify-content-end gap-2 mt-4">
+                <a href="{% url 'accounts:dashboard' %}" class="btn btn-light px-4 rounded-3">Bekor qilish</a>
+                <button type="submit" class="btn btn-warning fw-bold px-4 rounded-3">Saqlash</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

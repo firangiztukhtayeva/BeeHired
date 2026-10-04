@@ -1,6 +1,7 @@
 from django.db import models
 from django.conf import settings
-from jobs.models import Job, Resume
+from jobs.models import Job
+from accounts.models import Resume  
 
 User = settings.AUTH_USER_MODEL
 

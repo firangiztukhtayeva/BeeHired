@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container my-5">
+    <div class="row g-4">
+        <div class="col-lg-4">
+            <div class="card border-0 shadow-sm rounded-4 p-4 text-center bg-white">
+                <div class="avatar-circle mx-auto mb-3 bg-warning text-dark fw-bold fs-2 d-flex align-items-center justify-content-center overflow-hidden" style="width: 90px; height: 90px; border-radius: 50%;">
+    {% if user.avatar %}
+        <img src="{{ user.avatar.url }}" alt="{{ user.username }}" style="width: 100%; height: 100%; object-fit: cover;">
+    {% else %}
+        {{ resume.full_name|slice:":1"|upper }}
+    {% endif %}
+</div>
+                <h4 class="fw-bold text-dark mb-1">{{ resume.full_name }}</h4>
+                <p class="text-muted mb-3">{{ resume.title }}</p>
+                <div class="d-flex justify-content-center gap-2 mb-3">
+                    {% if resume.github_link %}
+                        <a href="{{ resume.github_link }}" target="_blank" class="btn btn-outline-dark btn-sm rounded-pill"><i class="bi bi-github"></i> GitHub</a>
+                    {% endif %}
+                    {% if resume.linkedin_link %}
+                        <a href="{{ resume.linkedin_link }}" target="_blank" class="btn btn-outline-primary btn-sm rounded-pill"><i class="bi bi-linkedin"></i> LinkedIn</a>
+                    {% endif %}
+                </div>
+                <a href="{% url 'accounts:edit_resume' %}" class="btn btn-warning w-100 fw-bold rounded-3">
+                    <i class="bi bi-pencil-square"></i> Rezyumeni tahrirlash
+                </a>
+            </div>
+        </div>
+
+    
+        <div class="col-lg-8">
+            <div class="card border-0 shadow-sm rounded-4 p-4 bg-white mb-4">
+                <h5 class="fw-bold mb-3 text-dark"><i class="bi bi-person-badge text-warning me-2"></i> O'zim haqimda</h5>
+                <p class="text-secondary mb-0">{{ resume.bio|default:"Hali ma'lumot kiritilmagan." }}</p>
+            </div>
+
+            <div class="card border-0 shadow-sm rounded-4 p-4 bg-white mb-4">
+                <h5 class="fw-bold mb-3 text-dark"><i class="bi bi-tools text-warning me-2"></i> Ko'nikmalar</h5>
+                {% if resume.skills %}
+                    <div class="d-flex flex-wrap gap-2">
+                        {% for skill in resume.skills.split %}
+                            <span class="badge bg-light text-dark border px-3 py-2 rounded-pill fs-6">{{ skill|slugify }}</span>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <p class="text-muted mb-0">Ko'nikmalar hali kiritilmagan.</p>
+                {% endif %}
+            </div>
+
+            <div class="row g-4">
+                <div class="col-md-6">
+                    <div class="card border-0 shadow-sm rounded-4 p-4 bg-white h-100">
+                        <h5 class="fw-bold mb-3 text-dark"><i class="bi bi-mortarboard text-warning me-2"></i> Ta'lim</h5>
+                        <p class="text-secondary mb-0" style="white-space: pre-line;">{{ resume.education|default:"Ma'lumot yo'q" }}</p>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card border-0 shadow-sm rounded-4 p-4 bg-white h-100">
+                        <h5 class="fw-bold mb-3 text-dark"><i class="bi bi-briefcase text-warning me-2"></i> Ish tajribasi</h5>
+                        <p class="text-secondary mb-0" style="white-space: pre-line;">{{ resume.experience|default:"Ma'lumot yo'q" }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
