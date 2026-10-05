@@ -1,0 +1,123 @@
+/* CIRCULAR GLASSMORPHISM LOGIN FORM */
+.auth-wrapper {
+    min-height: 80vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.circular-auth-card {
+    width: 450px;
+    height: 450px;
+    border-radius: 50%; /* Mukammal doira shakli */
+    background: rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 2px solid rgba(255, 184, 0, 0.3); /* Oltin rang chegara */
+    box-shadow: 0 0 35px rgba(255, 184, 0, 0.25), inset 0 0 15px rgba(255, 255, 255, 0.1);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 40px;
+    text-align: center;
+    position: relative;
+    transition: transform 0.4s ease, box-shadow 0.4s ease;
+}
+
+.circular-auth-card:hover {
+    transform: scale(1.02);
+    box-shadow: 0 0 45px rgba(255, 184, 0, 0.4), inset 0 0 20px rgba(255, 255, 255, 0.2);
+}
+
+/* INPUT MAYDONLARI */
+.circular-auth-card .form-control {
+    background: rgba(3, 14, 80, 0.6);
+    border: 1px solid rgba(255, 184, 0, 0.3);
+    color: #ffffff;
+    border-radius: 25px;
+    padding: 10px 20px;
+    font-size: 0.9rem;
+    text-align: center;
+}
+
+.circular-auth-card .form-control:focus {
+    background: rgba(3, 14, 80, 0.85);
+    border-color: #FFB800;
+    box-shadow: 0 0 12px rgba(255, 184, 0, 0.5);
+    color: #ffffff;
+}
+
+.circular-auth-card .form-control::placeholder {
+    color: rgba(255, 255, 255, 0.6);
+}
+
+/* TUGMA */
+.btn-honey-circle {
+    background: linear-gradient(45deg, #FFB800, #FFC107);
+    color: #030E50;
+    font-weight: 700;
+    border-radius: 25px;
+    padding: 10px 30px;
+    border: none;
+    transition: all 0.3s ease;
+    box-shadow: 0 5px 15px rgba(255, 184, 0, 0.4);
+}
+
+.btn-honey-circle:hover {
+    background: linear-gradient(45deg, #FFC107, #FFD54F);
+    color: #000000;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(255, 184, 0, 0.6);
+}
+
+/* KICHIK MASCOT ICON */
+.login-mascot-icon {
+    width: 60px;
+    height: 60px;
+    object-fit: contain;
+    filter: drop-shadow(0 5px 10px rgba(255, 184, 0, 0.4));
+    animation: floatingBee 2.5s ease-in-out infinite alternate;
+}
+
+/* ADAPTIV (MOBIL) QISM */
+@media (max-width: 500px) {
+    .circular-auth-card {
+        width: 340px;
+        height: 340px;
+        padding: 25px;
+    }
+    
+    .circular-auth-card h3 {
+        font-size: 1.3rem;
+    }
+}
+
+
+
+/* registeration part start */
+
+/* REGISTER FORMA UCHUN KATTA AYLANA */
+.circular-auth-card.register-card {
+    width: 520px;
+    height: 520px;
+    padding: 35px 45px;
+}
+
+/* Scrollbar ko'rinmasligi uchun */
+.circular-auth-card form::-webkit-scrollbar {
+    display: none;
+}
+
+@media (max-width: 560px) {
+    .circular-auth-card.register-card {
+        width: 360px;
+        height: auto;
+        min-height: 500px;
+        border-radius: 40px; /* Mobil qurilmalarda qulayroq ko'rinishi uchun Oval/Radius */
+        padding: 30px 20px;
+    }
+}
+
+/* registeration part end */

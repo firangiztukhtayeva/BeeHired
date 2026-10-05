@@ -74,43 +74,25 @@
 
 
 /* ==========================================
-   BEEHIRED FUTURISTIC GLASS & ANIMATION THEME
+   BEEHIRED FUTURISTIC GLASS & FLUFFY THEME
    ========================================== */
 
 :root {
-    --primary-blue: #2875FB;
-    --dark-blue: #030E50;
-    --light-blue: #C3D7FC;
+    --primary-blue: #1E3FB2;
+    --bright-blue: #2875FB;
     --honey-gold: #FFB800;
     --honey-yellow: #FFC107;
-    --glass-bg: rgba(255, 255, 255, 0.25);
-    --glass-border: rgba(255, 255, 255, 0.4);
-    --glass-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
+    --dark-navy: #030E50;
+    --glass-bg: rgba(255, 255, 255, 0.08);
+    --glass-border: rgba(255, 255, 255, 0.15);
 }
 
 body {
-    background: linear-gradient(135deg, #eef3fc 0%, #dbe7ff 50%, #fff8e7 100%);
+    background: linear-gradient(135deg, #030E50 0%, #1E3FB2 50%, #0a192f 100%);
     background-attachment: fixed;
+    color: #ffffff;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     min-height: 100vh;
-    color: #2c3e50;
-}
-
-/* --- GLASSMORPHISM CARD & NAVBAR --- */
-.glass-card {
-    background: var(--glass-bg);
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
-    border: 1px solid var(--glass-border);
-    box-shadow: var(--glass-shadow);
-    border-radius: 24px;
-}
-
-.glass-nav {
-    background: rgba(3, 14, 80, 0.75) !important;
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 /* --- FULLSCREEN SPLASH LOADER --- */
@@ -134,54 +116,66 @@ body {
     visibility: hidden;
 }
 
-.bee-float-anim {
+/* FLUFFY 3D BH LOGO */
+.fluffy-bh-logo {
+    font-size: 5rem;
+    font-weight: 900;
+    letter-spacing: 4px;
+    background: linear-gradient(135deg, #FFD700 0%, #FFB800 50%, #2875FB 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-shadow: 0 15px 30px rgba(255, 184, 0, 0.3);
+    position: relative;
+    display: inline-block;
+    filter: drop-shadow(0 10px 15px rgba(0, 0, 0, 0.4));
+}
+
+/* FLOATING ANIMATION */
+.bee-float {
     animation: floatingBee 2.2s ease-in-out infinite alternate;
-    filter: drop-shadow(0 15px 25px rgba(255, 184, 0, 0.4));
+    display: inline-block;
+    filter: drop-shadow(0 10px 20px rgba(255, 184, 0, 0.4));
 }
 
 @keyframes floatingBee {
     0% { transform: translateY(0px) rotate(0deg) scale(1); }
-    50% { transform: translateY(-18px) rotate(-3deg) scale(1.05); }
-    100% { transform: translateY(0px) rotate(3deg) scale(1); }
+    50% { transform: translateY(-15px) rotate(-4deg) scale(1.05); }
+    100% { transform: translateY(0px) rotate(4deg) scale(1); }
 }
 
-.pulse-glow {
+.pulse-text {
     animation: pulseGlow 1.8s infinite alternate;
 }
 
 @keyframes pulseGlow {
-    from { text-shadow: 0 0 10px #FFB800, 0 0 20px #FFB800; }
-    to { text-shadow: 0 0 20px #FFC107, 0 0 35px #2875FB; }
+    from { text-shadow: 0 0 10px #FFB800; }
+    to { text-shadow: 0 0 20px #FFC107, 0 0 30px #2875FB; }
 }
 
-/* --- ASSISTANT BUBBLE --- */
-.assistant-container {
-    animation: floatAssistant 3s ease-in-out infinite alternate;
+/* GLASSMORPHISM CARD & NAVBAR */
+.glass-card {
+    background: var(--glass-bg);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid var(--glass-border);
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+    border-radius: 20px;
 }
 
-@keyframes floatAssistant {
-    0% { transform: translateY(0); }
-    100% { transform: translateY(-8px); }
+.glass-nav {
+    background: rgba(3, 14, 80, 0.85) !important;
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
+/* ASSISTANT SPEECH BUBBLE */
 .speech-bubble {
-    position: relative;
-    background: rgba(255, 255, 255, 0.85);
-    backdrop-filter: blur(12px);
-    border: 1.5px solid var(--honey-gold);
-    border-radius: 18px;
+    background: rgba(255, 255, 255, 0.95);
+    color: #030E50;
+    border-radius: 16px;
     padding: 12px 20px;
-    box-shadow: 0 10px 25px rgba(40, 117, 251, 0.15);
-}
-
-.speech-bubble::before {
-    content: '';
-    position: absolute;
-    left: -10px;
-    top: 50%;
-    transform: translateY(-50%);
-    border-style: solid;
-    border-width: 8px 10px 8px 0;
-    border-color: transparent rgba(255, 255, 255, 0.85) transparent transparent;
+    border-left: 5px solid var(--honey-gold);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
 }
 
