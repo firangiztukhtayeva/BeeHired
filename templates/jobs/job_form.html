@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block title %}Yangi vakansiya e'lon qilish{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card bg-dark text-white border-secondary p-4 rounded-4 shadow-lg">
+                <h3 class="text-warning fw-bold mb-4">Yangi vakansiya yaratish</h3>
+                <form method="post">
+                    {% csrf_token %}
+                    {% for field in form %}
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">{{ field.label }}</label>
+                            {{ field }}
+                            {% if field.help_text %}
+                                <div class="form-text text-light opacity-50">{{ field.help_text }}</div>
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+                    <div class="d-flex justify-content-end gap-2 mt-4">
+                        <a href="{% url 'jobs:job_list' %}" class="btn btn-outline-light rounded-pill px-4">Bekor qilish</a>
+                        <button type="submit" class="btn btn-warning rounded-pill px-5 fw-bold text-dark">E'lon qilish 🚀</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

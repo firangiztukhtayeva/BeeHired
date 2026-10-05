@@ -2,6 +2,9 @@ from django.shortcuts import render
 from django.db.models import Q
 from django.shortcuts import get_object_or_404, render
 from .models import Category, Company, Job
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import redirect
+from .forms import JobForm
 
 def home_view(request):
     return render(request, 'base.html')
@@ -56,3 +59,24 @@ def job_detail(request, pk):
         "related_jobs": related_jobs,
     }
     return render(request, "jobs/job_detail.html", context)
+
+
+
+@login_required
+def job_create(request):
+    """Yangi vakansiya yaratish"""
+    # Foydalanuvchiga bog'langan kompaniyalik tekshiruvi
+    if not hasattr(request.user, "company"):
+        return redirect("jobs:job_list")
+
+    if request.method == "POST":
+        form = JobForm(request.POST)
+        if form.is_valid():
+            job = form.save(commit=False)
+            job.company = request.user.company
+            job.save()
+            return redirect("jobs:job_detail", pk=job.pk)
+    else:
+        form = JobForm()
+
+    return render(request, "jobs/job_form.html", {"form": form})
