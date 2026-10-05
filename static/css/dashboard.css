@@ -1,0 +1,52 @@
+/* DASHBOARD & EDIT RESUME STYLES */
+.dashboard-card {
+    background: rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 184, 0, 0.25);
+    border-radius: 24px;
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+    padding: 30px;
+}
+
+.avatar-circle {
+    width: 90px;
+    height: 90px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #FFB800 0%, #1E3FB2 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.2rem;
+    color: #ffffff;
+    font-weight: bold;
+    border: 3px solid rgba(255, 255, 255, 0.3);
+    box-shadow: 0 0 20px rgba(255, 184, 0, 0.3);
+}
+
+/* FORM STYLES FOR EDIT RESUME */
+.glass-input {
+    background: rgba(3, 14, 80, 0.6) !important;
+    border: 1px solid rgba(255, 184, 0, 0.3) !important;
+    color: #ffffff !important;
+    border-radius: 12px !important;
+    padding: 12px 18px !important;
+}
+
+.glass-input:focus {
+    border-color: #FFB800 !important;
+    box-shadow: 0 0 12px rgba(255, 184, 0, 0.4) !important;
+}
+
+.glass-input::placeholder {
+    color: rgba(255, 255, 255, 0.5) !important;
+}
+
+.badge-honey {
+    background-color: rgba(255, 184, 0, 0.15);
+    color: #FFB800;
+    border: 1px solid rgba(255, 184, 0, 0.4);
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-weight: 600;
+}

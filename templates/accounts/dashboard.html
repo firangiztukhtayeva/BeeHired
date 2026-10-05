@@ -1,67 +1,137 @@
 {% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Profilim - BeeHired{% endblock %}
+
 {% block hero %}{% endblock hero %}
+
 {% block content %}
+<link rel="stylesheet" href="{% static 'css/dashboard.css' %}">
+
 <div class="container my-5">
-    <div class="row g-4">
-        <div class="col-lg-4">
-            <div class="card border-0 shadow-sm rounded-4 p-4 text-center bg-white">
-                <div class="avatar-circle mx-auto mb-3 bg-warning text-dark fw-bold fs-2 d-flex align-items-center justify-content-center overflow-hidden" style="width: 90px; height: 90px; border-radius: 50%;">
-    {% if user.avatar %}
-        <img src="{{ user.avatar.url }}" alt="{{ user.username }}" style="width: 100%; height: 100%; object-fit: cover;">
-    {% else %}
-        {{ resume.full_name|slice:":1"|upper }}
-    {% endif %}
-</div>
-                <h4 class="fw-bold text-dark mb-1">{{ resume.full_name }}</h4>
-                <p class="text-muted mb-3">{{ resume.title }}</p>
-                <div class="d-flex justify-content-center gap-2 mb-3">
-                    {% if resume.github_link %}
-                        <a href="{{ resume.github_link }}" target="_blank" class="btn btn-outline-dark btn-sm rounded-pill"><i class="bi bi-github"></i> GitHub</a>
+    <div class="row justify-content-center">
+        <div class="col-lg-9">
+            
+            <!-- PROFIL KARTASI -->
+            <div class="dashboard-card mb-4 text-white">
+                <div class="d-flex flex-column flex-md-row align-items-center gap-4 text-center text-md-start">
+                    
+                    <!-- Avatar / Rasm -->
+                    <div class="flex-shrink-0">
+                        {% if user.avatar %}
+                            <img src="{{ user.avatar.url }}" alt="Profile Photo" class="rounded-circle border border-3 border-warning shadow" style="width: 105px; height: 105px; object-fit: cover;">
+                        {% else %}
+                            <div class="avatar-circle">
+                                {{ user.username|slice:":1"|upper }}
+                            </div>
+                        {% endif %}
+                    </div>
+
+                    <div class="flex-grow-1">
+                        <h2 class="fw-bold mb-1">{{ resume.full_name|default:user.username }}</h2>
+                        <p class="text-warning mb-1">
+                            <i class="bi bi-envelope-fill me-1"></i> {{ user.email }}
+                        </p>
+                        {% if user.phone_number %}
+                            <p class="text-light small mb-2">
+                                <i class="bi bi-telephone-fill me-1"></i> {{ user.phone_number }}
+                            </p>
+                        {% endif %}
+                        <span class="badge badge-honey">
+                            <i class="bi bi-briefcase me-1"></i> {{ resume.title }}
+                        </span>
+                    </div>
+
+                    <div>
+                        <a href="{% url 'accounts:edit_resume' %}" class="btn btn-warning rounded-pill px-4 py-2 fw-bold text-dark shadow">
+                            <i class="bi bi-pencil-square me-1"></i> Tahrirlash
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- REZYUME MA'LUMOTLARI KARTASI -->
+            <div class="dashboard-card text-white">
+                <div class="d-flex justify-content-between align-items-center mb-4 pb-2 border-bottom border-secondary">
+                    <h4 class="fw-bold m-0 text-warning">
+                        <i class="bi bi-file-earmark-person me-2"></i>Mening Rezyumem
+                    </h4>
+                    <a href="{% url 'accounts:edit_resume' %}" class="btn btn-outline-light btn-sm rounded-pill px-3">
+                        O'zgartirish
+                    </a>
+                </div>
+
+                <div class="row g-4">
+                    <!-- To'liq Ism-sharif -->
+                    <div class="col-md-6">
+                        <h6 class="text-warning text-uppercase small fw-bold">To'liq ism-sharif</h6>
+                        <p class="fs-5 fw-semibold">{{ resume.full_name|default:"Ko'rsatilmadi" }}</p>
+                    </div>
+
+                    <!-- Mutaxassislik -->
+                    <div class="col-md-6">
+                        <h6 class="text-warning text-uppercase small fw-bold">Mutaxassislik / Kasb</h6>
+                        <p class="fs-5 text-info fw-bold">{{ resume.title|default:"Ko'rsatilmadi" }}</p>
+                    </div>
+
+                    <!-- Telefon raqam -->
+                    <div class="col-md-6">
+                        <h6 class="text-warning text-uppercase small fw-bold">Telefon (Rezyume)</h6>
+                        <p class="fs-6">{{ resume.phone|default:user.phone_number|default:"Ko'rsatilmadi" }}</p>
+                    </div>
+
+                    <!-- Yashash manzili -->
+                    <div class="col-md-6">
+                        <h6 class="text-warning text-uppercase small fw-bold">Yashash manzili</h6>
+                        <p class="fs-6">{{ resume.location|default:"Ko'rsatilmadi" }}</p>
+                    </div>
+
+                    <!-- Ta'lim -->
+                    <div class="col-md-12">
+                        <h6 class="text-warning text-uppercase small fw-bold">O'qish joyi / Ta'lim</h6>
+                        <p class="lh-lg text-light opacity-90">{{ resume.education|default:"Ma'lumot kiritilmagan"|linebreaks }}</p>
+                    </div>
+
+                    <!-- Ko'nikmalar -->
+                    <div class="col-md-12">
+                        <h6 class="text-warning text-uppercase small fw-bold">Ko'nikmalar</h6>
+                        <p class="lh-lg text-light opacity-90">{{ resume.skills|default:"Ko'nikmalar kiritilmagan" }}</p>
+                    </div>
+
+                    <!-- O'zim haqimda (Bio) -->
+                    <div class="col-md-12">
+                        <h6 class="text-warning text-uppercase small fw-bold">O'zim haqimda (Bio)</h6>
+                        <p class="lh-lg text-light opacity-90">{{ resume.bio|default:"Ma'lumot kiritilmagan"|linebreaks }}</p>
+                    </div>
+
+                    <!-- Ish tajribasi (Experience) -->
+                    <div class="col-md-12">
+                        <h6 class="text-warning text-uppercase small fw-bold">Ish tajribasi</h6>
+                        <p class="lh-lg text-light opacity-90">{{ resume.experience|default:"Ma'lumot kiritilmagan"|linebreaks }}</p>
+                    </div>
+
+                    <!-- GitHub va LinkedIn tugmalari -->
+                    {% if resume.github_link or resume.linkedin_link %}
+                        <div class="col-md-12 border-top border-secondary pt-3 mt-3">
+                            <h6 class="text-warning text-uppercase small fw-bold mb-3">Ijtimoiy tarmoqlar va havolalar</h6>
+                            <div class="d-flex flex-wrap gap-3">
+                                {% if resume.github_link %}
+                                    <a href="{{ resume.github_link }}" target="_blank" class="btn btn-outline-light rounded-pill px-4">
+                                        <i class="bi bi-github me-2"></i>GitHub Profil
+                                    </a>
+                                {% endif %}
+
+                                {% if resume.linkedin_link %}
+                                    <a href="{{ resume.linkedin_link }}" target="_blank" class="btn btn-outline-primary rounded-pill px-4">
+                                        <i class="bi bi-linkedin me-2"></i>LinkedIn Profil
+                                    </a>
+                                {% endif %}
+                            </div>
+                        </div>
                     {% endif %}
-                    {% if resume.linkedin_link %}
-                        <a href="{{ resume.linkedin_link }}" target="_blank" class="btn btn-outline-primary btn-sm rounded-pill"><i class="bi bi-linkedin"></i> LinkedIn</a>
-                    {% endif %}
-                </div>
-                <a href="{% url 'accounts:edit_resume' %}" class="btn btn-warning w-100 fw-bold rounded-3">
-                    <i class="bi bi-pencil-square"></i> Rezyumeni tahrirlash
-                </a>
-            </div>
-        </div>
-
-    
-        <div class="col-lg-8">
-            <div class="card border-0 shadow-sm rounded-4 p-4 bg-white mb-4">
-                <h5 class="fw-bold mb-3 text-dark"><i class="bi bi-person-badge text-warning me-2"></i> O'zim haqimda</h5>
-                <p class="text-secondary mb-0">{{ resume.bio|default:"Hali ma'lumot kiritilmagan." }}</p>
-            </div>
-
-            <div class="card border-0 shadow-sm rounded-4 p-4 bg-white mb-4">
-                <h5 class="fw-bold mb-3 text-dark"><i class="bi bi-tools text-warning me-2"></i> Ko'nikmalar</h5>
-                {% if resume.skills %}
-                    <div class="d-flex flex-wrap gap-2">
-                        {% for skill in resume.skills.split %}
-                            <span class="badge bg-light text-dark border px-3 py-2 rounded-pill fs-6">{{ skill|slugify }}</span>
-                        {% endfor %}
-                    </div>
-                {% else %}
-                    <p class="text-muted mb-0">Ko'nikmalar hali kiritilmagan.</p>
-                {% endif %}
-            </div>
-
-            <div class="row g-4">
-                <div class="col-md-6">
-                    <div class="card border-0 shadow-sm rounded-4 p-4 bg-white h-100">
-                        <h5 class="fw-bold mb-3 text-dark"><i class="bi bi-mortarboard text-warning me-2"></i> Ta'lim</h5>
-                        <p class="text-secondary mb-0" style="white-space: pre-line;">{{ resume.education|default:"Ma'lumot yo'q" }}</p>
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="card border-0 shadow-sm rounded-4 p-4 bg-white h-100">
-                        <h5 class="fw-bold mb-3 text-dark"><i class="bi bi-briefcase text-warning me-2"></i> Ish tajribasi</h5>
-                        <p class="text-secondary mb-0" style="white-space: pre-line;">{{ resume.experience|default:"Ma'lumot yo'q" }}</p>
-                    </div>
                 </div>
             </div>
+
         </div>
     </div>
 </div>

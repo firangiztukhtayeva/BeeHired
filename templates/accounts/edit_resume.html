@@ -1,82 +1,117 @@
 {% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Rezyumeni tahrirlash - BeeHired{% endblock %}
 
 {% block hero %}{% endblock hero %}
 
 {% block content %}
-<div class="container my-5" style="max-width: 800px;">
-    <div class="card border-0 shadow-sm rounded-4 p-4 bg-white">
-        <h3 class="fw-bold mb-4 text-dark">
-            <i class="bi bi-file-earmark-person text-warning me-2"></i> Profil va Rezyumeni tahrirlash
-        </h3>
-        
-        <!-- 1. Enctype atributi fayl va rasmlar yuklanishi uchun shart -->
-        <form method="post" enctype="multipart/form-data">
-            {% csrf_token %}
-            
-            <!-- 2. Profil rasmi (Avatar) qismi -->
-            <div class="card p-3 bg-light border-0 rounded-3 mb-4 text-center">
-                <label class="form-label fw-bold d-block text-start mb-2">Profil rasmi</label>
+<link rel="stylesheet" href="{% static 'css/dashboard.css' %}">
+
+<div class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="dashboard-card text-white">
                 
-                {% if user.avatar %}
-                    <div class="mb-3">
-                        <img src="{{ user.avatar.url }}" alt="Profil rasmi" class="rounded-circle shadow-sm" style="width: 110px; height: 110px; object-fit: cover;">
+                <div class="d-flex align-items-center justify-content-between mb-4 pb-3 border-bottom border-secondary">
+                    <h3 class="fw-bold text-warning m-0">
+                        <i class="bi bi-pencil-fill me-2"></i>Rezyumeni tahrirlash
+                    </h3>
+                    <a href="{% url 'accounts:dashboard' %}" class="btn btn-outline-light btn-sm rounded-pill px-3">
+                        <i class="bi bi-arrow-left me-1"></i> Bekor qilish
+                    </a>
+                </div>
+
+                <form method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+
+                    {% if form.errors or profile_form.errors %}
+                        <div class="alert alert-danger bg-danger text-white border-0 rounded-3 mb-4">
+                            <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                            Iltimos, shakldagi xatoliklarni to'g'rilang!
+                        </div>
+                    {% endif %}
+
+                    <div class="row g-3">
+                        <!-- PROFIL (CustomUser) MAYDONLARI -->
+                        <h5 class="text-warning border-bottom border-secondary pb-2 mb-2">
+                            <i class="bi bi-person-badge me-2"></i>Profil va Avatar
+                        </h5>
+
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold text-warning">Profil rasmi (Avatar)</label>
+                            {{ profile_form.avatar }}
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold text-warning">Telefon raqam (Profil)</label>
+                            {{ profile_form.phone_number }}
+                        </div>
+
+                        <!-- REZYUME MAYDONLARI (ResumeForm) -->
+                        <h5 class="text-warning border-bottom border-secondary pb-2 mb-2 mt-4">
+                            <i class="bi bi-file-earmark-text me-2"></i>Rezyume ma'lumotlari
+                        </h5>
+
+                        <div class="col-md-8">
+                            <label class="form-label fw-bold text-warning">To'liq ism-sharif (F.I.O)</label>
+                            {{ form.full_name }}
+                        </div>
+
+                        <div class="col-md-4">
+                            <label class="form-label fw-bold text-warning">Mutaxassislik / Kasb</label>
+                            {{ form.title }}
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold text-warning">Telefon raqam (Rezyume)</label>
+                            {{ form.phone }}
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold text-warning">Yashash manzili</label>
+                            {{ form.location }}
+                        </div>
+
+                        <div class="col-md-12">
+                            <label class="form-label fw-bold text-warning">Ko'nikmalar (Skills)</label>
+                            {{ form.skills }}
+                        </div>
+
+                        <div class="col-md-12">
+                            <label class="form-label fw-bold text-warning">O'qish joyi / Ta'lim</label>
+                            {{ form.education }}
+                        </div>
+
+                        <div class="col-md-12">
+                            <label class="form-label fw-bold text-warning">O'zim haqimda (Bio)</label>
+                            {{ form.bio }}
+                        </div>
+
+                        <div class="col-md-12">
+                            <label class="form-label fw-bold text-warning">Ish tajribasi (Experience)</label>
+                            {{ form.experience }}
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold text-warning">GitHub linki</label>
+                            {{ form.github_link }}
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold text-warning">LinkedIn linki</label>
+                            {{ form.linkedin_link }}
+                        </div>
                     </div>
-                {% endif %}
-                
-                {{ profile_form.avatar }}
-            </div>
 
-            <hr class="my-4">
+                    <div class="d-flex justify-content-end gap-3 mt-4 pt-2 border-top border-secondary">
+                        <a href="{% url 'accounts:dashboard' %}" class="btn btn-outline-light rounded-pill px-4">Bekor qilish</a>
+                        <button type="submit" class="btn btn-warning rounded-pill px-5 fw-bold text-dark shadow">Saqlash 💾</button>
+                    </div>
 
-            <!-- 3. Rezyume maydonlari -->
-            <div class="row g-3">
-                <div class="col-md-6">
-                    <label class="form-label fw-semibold">To'liq ism-sharif</label>
-                    {{ form.full_name }}
-                </div>
-                <div class="col-md-6">
-                    <label class="form-label fw-semibold">Kasb / Sohangiz</label>
-                    {{ form.title }}
-                </div>
-                <div class="col-md-6">
-                    <label class="form-label fw-semibold">Telefon</label>
-                    {{ form.phone }}
-                </div>
-                <div class="col-md-6">
-                    <label class="form-label fw-semibold">Yashash manzili</label>
-                    {{ form.location }}
-                </div>
-                <div class="col-12">
-                    <label class="form-label fw-semibold">O'zingiz haqida qisqacha</label>
-                    {{ form.bio }}
-                </div>
-                <div class="col-12">
-                    <label class="form-label fw-semibold">Ko'nikmalar</label>
-                    {{ form.skills }}
-                </div>
-                <div class="col-12">
-                    <label class="form-label fw-semibold">Ta'lim</label>
-                    {{ form.education }}
-                </div>
-                <div class="col-12">
-                    <label class="form-label fw-semibold">Ish tajribasi</label>
-                    {{ form.experience }}
-                </div>
-                <div class="col-md-6">
-                    <label class="form-label fw-semibold">GitHub havolasi</label>
-                    {{ form.github_link }}
-                </div>
-                <div class="col-md-6">
-                    <label class="form-label fw-semibold">LinkedIn havolasi</label>
-                    {{ form.linkedin_link }}
-                </div>
+                </form>
             </div>
-
-            <div class="d-flex justify-content-end gap-2 mt-4">
-                <a href="{% url 'accounts:dashboard' %}" class="btn btn-light px-4 rounded-3">Bekor qilish</a>
-                <button type="submit" class="btn btn-warning fw-bold px-4 rounded-3">Saqlash</button>
-            </div>
-        </form>
+        </div>
     </div>
 </div>
 {% endblock %}

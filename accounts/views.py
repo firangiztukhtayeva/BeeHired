@@ -54,9 +54,17 @@ def profile_dashboard(request):
     # Foydalanuvchida rezyume bor-yo'qligini tekshiramiz yoki yaratamiz
     resume, created = Resume.objects.get_or_create(
         user=request.user,
-        defaults={'full_name': request.user.username, 'title': 'Dasturchi / Mutaxassis'}
+        defaults={
+            "full_name": request.user.get_full_name() or request.user.username,
+            "title": "Dasturchi / Mutaxassis",
+        },
     )
-    return render(request, 'accounts/dashboard.html', {'resume': resume})
+
+    context = {
+        "user": request.user,
+        "resume": resume,
+    }
+    return render(request, "accounts/dashboard.html", context)
 
 @login_required
 def edit_resume(request):

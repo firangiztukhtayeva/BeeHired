@@ -123,6 +123,7 @@ body {
     letter-spacing: 4px;
     background: linear-gradient(135deg, #FFD700 0%, #FFB800 50%, #2875FB 100%);
     -webkit-background-clip: text;
+    background-clip: text;
     -webkit-text-fill-color: transparent;
     text-shadow: 0 15px 30px rgba(255, 184, 0, 0.3);
     position: relative;
