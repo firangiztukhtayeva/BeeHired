@@ -1,0 +1,103 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Vakansiyalar - BeeHired{% endblock %}
+
+{% block hero %}{% endblock hero %}
+
+{% block content %}
+<div class="container my-5">
+    
+    <!-- QIDIRUV VA FILTR SEKTSIYASI -->
+    <div class="card p-4 mb-5 border-0 shadow-lg bg-dark text-white rounded-4">
+        <form method="get" action="{% url 'jobs:job_list' %}" class="row g-3 align-items-center">
+            
+            <div class="col-md-5">
+                <div class="input-group">
+                    <span class="input-group-text bg-secondary border-0 text-white"><i class="bi bi-search"></i></span>
+                    <input type="text" name="q" value="{{ search_query }}" class="form-control bg-secondary text-white border-0" placeholder="Kasb, texnologiya yoki shahar...">
+                </div>
+            </div>
+
+            <div class="col-md-3">
+                <select name="category" class="form-select bg-secondary text-white border-0">
+                    <option value="">Barcha kategoriyalar</option>
+                    {% for cat in categories %}
+                        <option value="{{ cat.slug }}" {% if selected_category == cat.slug %}selected{% endif %}>{{ cat.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="col-md-2">
+                <select name="job_type" class="form-select bg-secondary text-white border-0">
+                    <option value="">Barcha turlar</option>
+                    <option value="full_time" {% if selected_job_type == 'full_time' %}selected{% endif %}>Full-time</option>
+                    <option value="part_time" {% if selected_job_type == 'part_time' %}selected{% endif %}>Part-time</option>
+                    <option value="remote" {% if selected_job_type == 'remote' %}selected{% endif %}>Remote</option>
+                    <option value="freelance" {% if selected_job_type == 'freelance' %}selected{% endif %}>Freelance</option>
+                </select>
+            </div>
+
+            <div class="col-md-2">
+                <button type="submit" class="btn btn-warning w-100 fw-bold rounded-pill">Qidirish</button>
+            </div>
+        </form>
+    </div>
+
+    <!-- VAKANSIYALAR RO'YXATI -->
+    <h3 class="fw-bold mb-4 text-warning">Mavjud Vakansiyalar</h3>
+
+    <div class="row g-4">
+        {% for job in jobs %}
+            <div class="col-md-6 col-lg-4">
+                <div class="card h-100 bg-dark text-white border-secondary shadow-sm rounded-4 p-3 position-relative">
+                    <div class="d-flex align-items-center mb-3">
+                        {% if job.company.logo %}
+                            <img src="{{ job.company.logo.url }}" alt="{{ job.company.name }}" class="rounded-circle me-3" style="width: 50px; height: 50px; object-fit: cover;">
+                        {% else %}
+                            <div class="bg-warning text-dark rounded-circle me-3 d-flex align-items-center justify-content-center fw-bold" style="width: 50px; height: 50px;">
+                                {{ job.company.name|slice:":1" }}
+                            </div>
+                        {% endif %}
+                        <div>
+                            <h5 class="card-title fw-bold m-0 fs-6 text-white">{{ job.title }}</h5>
+                            <span class="text-warning small"><i class="bi bi-building me-1"></i>{{ job.company.name }}</span>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <span class="badge bg-secondary me-1"><i class="bi bi-geo-alt me-1"></i>{{ job.location }}</span>
+                        <span class="badge bg-outline-warning text-warning border border-warning me-1">{{ job.get_job_type_display }}</span>
+                    </div>
+
+                    <p class="text-light small opacity-75 mb-3">
+                        {{ job.description|truncatewords:15 }}
+                    </p>
+
+                    <div class="mb-3">
+                        <small class="text-secondary d-block mb-1">Texnologiyalar:</small>
+                        <span class="badge bg-dark border border-secondary text-info fw-normal">{{ job.technologies }}</span>
+                    </div>
+
+                    <div class="mt-auto d-flex align-items-center justify-content-between pt-3 border-top border-secondary">
+                        <div class="text-warning fw-bold">
+                            {% if job.salary_min or job.salary_max %}
+                                ${{ job.salary_min|default:0 }} - ${{ job.salary_max|default:"..." }}
+                            {% else %}
+                                Kelishilgan
+                            {% endif %}
+                        </div>
+                        <a href="{% url 'jobs:job_detail' job.pk %}" class="btn btn-outline-warning btn-sm rounded-pill px-3">Batafsil</a>
+                    </div>
+                </div>
+            </div>
+        {% empty %}
+            <div class="col-12 text-center py-5">
+                <i class="bi bi-search text-secondary display-1 d-block mb-3"></i>
+                <h4 class="text-light">Hozircha hech qanday vakansiya topilmadi</h4>
+                <p class="text-secondary">Qidiruv parametrlarini o'zgartirib ko'ring yoki keyinroq tashrif buyuring.</p>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
