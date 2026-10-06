@@ -25,7 +25,7 @@ def register_view(request):
 
 def login_view(request):
     if request.user.is_authenticated:
-        return redirect('home')
+        return redirect('accounts:dashboard')  # yoki 'jobs:job_list'
 
     if request.method == 'POST':
         form = AuthenticationForm(request, data=request.POST)
@@ -33,7 +33,7 @@ def login_view(request):
             user = form.get_user()
             login(request, user)
             messages.success(request, f"Tizimga xush kelibsiz, {user.username}!")
-            return redirect('home')
+            return redirect('accounts:dashboard')  # Tizimga kirgach dashboard sahifasiga yo'naltiriladi
         else:
             messages.error(request, "Foydalanuvchi nomi yoki parol noto'g'ri kiritildi.")
     else:
@@ -43,10 +43,7 @@ def login_view(request):
 
 def logout_view(request):
     logout(request)
-    messages.info(request, "Tizimdan muvaffaqiyatli chiqdingiz.")
-    return redirect('home')
-
-
+    return redirect('jobs:job_list')  # Vakansiyalar ro'yxatiga/bosh sahifaga yo'naltiramiz
 
 
 @login_required

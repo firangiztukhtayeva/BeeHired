@@ -148,63 +148,67 @@
 
     <!-- 2. NAVBAR -->
     <nav class="navbar navbar-expand-lg navbar-dark glass-nav sticky-top py-3">
-        <div class="container">
-            <a class="navbar-brand fw-bold fs-3 text-white d-flex align-items-center gap-2" href="{% url 'jobs:home' %}">
-                <img src="{% static 'images/bee-mascot.png' %}" alt="BeeHired Logo" class="nav-logo-img">
-                <span>Bee<span style="color: var(--honey-gold);">Hired</span></span>
-            </a>
+    <div class="container">
+        <!-- LOGO -->
+        <a class="navbar-brand fw-bold fs-3 text-white d-flex align-items-center gap-2" href="{% url 'jobs:job_list' %}">
+            <img src="{% static 'images/bee-mascot.png' %}" alt="BeeHired Logo" class="nav-logo-img">
+            <span>Bee<span style="color: var(--honey-gold);">Hired</span></span>
+        </a>
 
-            <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
-            </button>
+        <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
 
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto align-items-center gap-3 mt-2 mt-lg-0">
-                    <li class="nav-item">
-                        <a class="nav-link text-white fw-semibold" href="{% url 'jobs:home' %}">
-                            <i class="bi bi-briefcase-fill text-warning me-1"></i> Vakansiyalar
-                        </a>
-                    </li>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto align-items-center gap-3 mt-2 mt-lg-0">
+                <!-- VAKANSIYALAR RO'YXATI -->
+                <li class="nav-item">
+                    <a class="nav-link text-white fw-semibold" href="{% url 'jobs:job_list' %}">
+                        <i class="bi bi-briefcase-fill text-warning me-1"></i> Vakansiyalar
+                    </a>
+                </li>
 
-                    {% if user.is_authenticated %}
-                        {% if user.role == 'employer' %}
-                            <!-- ISH BERUVCHI UCHUN MENYU -->
-                            <li class="nav-item">
-                                <a class="btn btn-warning btn-sm rounded-pill px-3 fw-bold text-dark" href="{% url 'jobs:job_create' %}">
-                                    <i class="bi bi-plus-circle-fill me-1"></i> Vakansiya e'lon qilish
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-white fw-semibold" href="{% url 'accounts:dashboard' %}">
-                                    <i class="bi bi-building text-info me-1"></i> Kabinet
-                                </a>
-                            </li>
-                        {% else %}
-                            <!-- ISH IZLOVCHI UCHUN MENYU -->
-                            <li class="nav-item">
-                                <a class="nav-link text-white fw-semibold" href="{% url 'accounts:dashboard' %}">
-                                    <i class="bi bi-person-badge-fill text-info me-1"></i> Profilim
-                                </a>
-                            </li>
-                        {% endif %}
-
+                {% if user.is_authenticated %}
+                    {% if user.role == 'EMPLOYER' or user.is_employer %}
+                        <!-- ISH BERUVCHI UCHUN MENYU -->
                         <li class="nav-item">
-                            <a class="btn btn-outline-warning btn-sm rounded-pill px-3 ms-lg-2" href="{% url 'accounts:logout' %}">
-                                Chiqish
+                            <a class="btn btn-warning btn-sm rounded-pill px-3 fw-bold text-dark" href="{% url 'jobs:job_create' %}">
+                                <i class="bi bi-plus-circle-fill me-1"></i> Vakansiya e'lon qilish
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-white fw-semibold" href="{% url 'accounts:dashboard' %}">
+                                <i class="bi bi-building text-info me-1"></i> Kabinet
                             </a>
                         </li>
                     {% else %}
+                        <!-- ISH IZLOVCHI (NOMZOD) UCHUN MENYU -->
                         <li class="nav-item">
-                            <a class="btn btn-outline-light btn-sm rounded-pill px-3" href="{% url 'accounts:login' %}">Kirish</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="btn btn-warning btn-sm rounded-pill px-3 fw-bold text-dark" href="{% url 'accounts:register' %}">Ro'yxatdan o'tish</a>
+                            <a class="nav-link text-white fw-semibold" href="{% url 'accounts:dashboard' %}">
+                                <i class="bi bi-person-badge-fill text-info me-1"></i> Profilim
+                            </a>
                         </li>
                     {% endif %}
-                </ul>
-            </div>
+
+                    <!-- CHIQISH TUGMASI -->
+                    <li class="nav-item">
+                        <a class="btn btn-outline-warning btn-sm rounded-pill px-3 ms-lg-2" href="{% url 'accounts:logout' %}">
+                            Chiqish
+                        </a>
+                    </li>
+                {% else %}
+                    <!-- MEHMONDAGI FOYDALANUVCHILAR UCHUN -->
+                    <li class="nav-item">
+                        <a class="btn btn-outline-light btn-sm rounded-pill px-3" href="{% url 'accounts:login' %}">Kirish</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="btn btn-warning btn-sm rounded-pill px-3 fw-bold text-dark" href="{% url 'accounts:register' %}">Ro'yxatdan o'tish</a>
+                    </li>
+                {% endif %}
+            </ul>
         </div>
-    </nav>
+    </div>
+</nav>
 
     {% block hero %}
     <!-- 3. BUZZ AI ASSISTANT BANNER -->

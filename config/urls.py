@@ -18,14 +18,12 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
-from jobs.views import home_view
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', home_view, name='home'),
-    path('', include('jobs.urls', namespace='jobs')),
-    path("jobs/", include("jobs.urls")), 
     path('accounts/', include('accounts.urls', namespace='accounts')),
+    path('jobs/', include('jobs.urls', namespace='jobs')),
+    path('', include('jobs.urls')),  # Bosh sahifa va boshqa yo'nalishlar uchun
 ]
 
 if settings.DEBUG:

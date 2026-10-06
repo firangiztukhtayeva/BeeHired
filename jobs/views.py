@@ -65,27 +65,25 @@ def job_detail(request, pk):
 @login_required
 def job_create(request):
     """Yangi vakansiya yaratish"""
-    if request.user.role != 'EMPLOYER':
-        return redirect("jobs:job_list")
-
-    # Agar kompaniyasi bo'lmasa, uni kompaniya yaratish sahifasiga yuboramiz!
-    if not hasattr(request.user, "company"):
-        messages.warning(request, "Vakansiya joylashdan oldin kompaniya profilingizni to'ldiring!")
-        return redirect("jobs:company_edit")
+    print("--- DIAGNOSTIKA START ---")
+    print("User Username:", request.user.username)
+    print("User Role:", getattr(request.user, 'role', 'ROLE YOQ'))
+    print("Has Company:", hasattr(request.user, 'company'))
+    print("--- DIAGNOSTIKA END ---")
 
     if request.method == "POST":
         form = JobForm(request.POST)
         if form.is_valid():
             job = form.save(commit=False)
-            job.company = request.user.company
+            if hasattr(request.user, "company"):
+                job.company = request.user.company
             job.save()
+            messages.success(request, "Vakansiya muvaffaqiyatli e'lon qilindi! 🚀")
             return redirect("jobs:job_detail", pk=job.pk)
     else:
         form = JobForm()
 
     return render(request, "jobs/job_form.html", {"form": form})
-
-
 
 
 @login_required

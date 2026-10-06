@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 
-{% block title %}Yangi vakansiya e'lon qilish{% endblock %}
+{% block title %}Kompaniya profilini tahrirlash{% endblock %}
 {% block hero %}{% endblock hero %}
 
 {% block content %}
@@ -8,8 +8,12 @@
     <div class="row justify-content-center">
         <div class="col-lg-8">
             <div class="card bg-dark text-white border-secondary p-4 rounded-4 shadow-lg">
-                <h3 class="text-warning fw-bold mb-4">Yangi vakansiya yaratish</h3>
-                <form method="post">
+                <h3 class="text-warning fw-bold mb-4">
+                    <i class="bi bi-building me-2"></i>Kompaniya ma'lumotlarini tahrirlash
+                </h3>
+                
+                <!-- Logotip (fayl) yuklanishi uchun enctype="multipart/form-data" zarur -->
+                <form method="post" enctype="multipart/form-data">
                     {% csrf_token %}
                     
                     {% if form.non_field_errors %}
@@ -20,7 +24,7 @@
 
                     {% for field in form %}
                         <div class="mb-3">
-                            <label class="form-label fw-bold">{{ field.label }}</label>
+                            <label class="form-label fw-bold text-light">{{ field.label }}</label>
                             {{ field }}
                             
                             {% if field.errors %}
@@ -33,9 +37,9 @@
                         </div>
                     {% endfor %}
                     
-                    <div class="d-flex justify-content-end gap-2 mt-4">
-                        <a href="{% url 'jobs:job_list' %}" class="btn btn-outline-light rounded-pill px-4">Bekor qilish</a>
-                        <button type="submit" class="btn btn-warning rounded-pill px-5 fw-bold text-dark">E'lon qilish 🚀</button>
+                    <div class="d-flex justify-content-end gap-2 mt-4 pt-2 border-top border-secondary">
+                        <a href="{% url 'accounts:dashboard' %}" class="btn btn-outline-light rounded-pill px-4">Bekor qilish</a>
+                        <button type="submit" class="btn btn-warning rounded-pill px-5 fw-bold text-dark">Saqlash 💾</button>
                     </div>
                 </form>
             </div>
