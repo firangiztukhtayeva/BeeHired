@@ -23,6 +23,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('accounts/', include('accounts.urls', namespace='accounts')),
     path('jobs/', include('jobs.urls', namespace='jobs')),
+    path('applications/', include('applications.urls', namespace='applications')), 
     path('', include('jobs.urls')),  # Bosh sahifa va boshqa yo'nalishlar uchun
 ]
 

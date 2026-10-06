@@ -5,6 +5,7 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect
 from django.contrib import messages
 from .forms import JobForm, CompanyForm
+from applications.models import Application
 
 def home_view(request):
     return render(request, 'base.html')
@@ -50,15 +51,23 @@ def job_list(request):
 def job_detail(request, pk):
     """Vakansiya batafsil sahifasi"""
     job = get_object_or_404(Job, pk=pk, is_active=True)
+    
+    # O'xshash vakansiyalar
     related_jobs = Job.objects.filter(
         category=job.category, is_active=True
     ).exclude(pk=job.pk)[:3]
 
+    # Nomzod ushbu vakansiyaga ariza topshirgan-topshirmaganini tekshiramiz
+    has_applied = False
+    if request.user.is_authenticated:
+        has_applied = Application.objects.filter(job=job, seeker=request.user).exists()
+
     context = {
         "job": job,
         "related_jobs": related_jobs,
+        "has_applied": has_applied,  # Shablon uchun 'has_applied' o'zgaruvchisini uzatamiz
     }
-    return render(request, "jobs/job_detail.html", context)
+    return render(request, "jobs/job_detail.html", context)  # yoki "jobs/job_detail.html"
 
 
 
