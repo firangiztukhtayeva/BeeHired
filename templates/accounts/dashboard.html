@@ -11,17 +11,101 @@
 <div class="container my-5">
     <div class="row justify-content-center">
         <div class="col-lg-9">
-            
+
+            {% if user.role == 'EMPLOYER' or user.is_employer %}
+            <!-- ================= ISH BERUVCHI (KOMPANIYA) PANELI ================= -->
+
+            <!-- PROFIL KARTASI (ISH BERUVCHI) -->
+            <div class="dashboard-card mb-4 text-white">
+                <div class="d-flex flex-column flex-md-row align-items-center gap-4 text-center text-md-start">
+                    <div class="flex-shrink-0">
+                        {% if user.company and user.company.logo %}
+                            <img src="{{ user.company.logo.url }}" alt="Company Logo" class="rounded-circle border border-3 border-warning" style="width: 90px; height: 90px; object-fit: cover;">
+                        {% elif user.avatar %}
+                            <img src="{{ user.avatar.url }}" alt="Profile Photo" class="rounded-circle border border-3 border-warning" style="width: 90px; height: 90px; object-fit: cover;">
+                        {% else %}
+                            <div class="bg-warning text-dark rounded-circle d-flex align-items-center justify-content-center fw-bold fs-2" style="width: 90px; height: 90px;">
+                                {{ user.username|slice:":1"|upper }}
+                            </div>
+                        {% endif %}
+                    </div>
+
+                    <div class="flex-grow-1">
+                        <h2 class="fw-bold mb-1">
+                            {% if user.company %}{{ user.company.name }}{% else %}{{ user.username }}{% endif %}
+                        </h2>
+                        <p class="text-warning mb-1">
+                            <i class="bi bi-envelope-fill me-1"></i> {{ user.email }}
+                        </p>
+                        {% if user.phone_number %}
+                            <p class="text-light small mb-2">
+                                <i class="bi bi-telephone-fill me-1"></i> {{ user.phone_number }}
+                            </p>
+                        {% endif %}
+                        <span class="badge bg-warning text-dark">
+                            <i class="bi bi-building me-1"></i> Ish beruvchi (Kompaniya)
+                        </span>
+                    </div>
+
+                    <div>
+                        <a href="{% url 'jobs:job_create' %}" class="btn btn-warning rounded-pill px-4 py-2 fw-bold text-dark">
+                            <i class="bi bi-plus-circle me-1"></i> Vakansiya yaratish
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- KOMPANIYA VAKANSIYALARI -->
+            <div class="dashboard-card text-white">
+                <div class="d-flex justify-content-between align-items-center mb-4 pb-2 border-bottom border-secondary">
+                    <h4 class="fw-bold m-0 text-warning">
+                        <i class="bi bi-briefcase-fill me-2"></i>E'lon qilingan vakansiyalar
+                    </h4>
+                    <a href="{% url 'jobs:job_create' %}" class="btn btn-outline-warning btn-sm rounded-pill px-3">
+                        + Yangi e'lon
+                    </a>
+                </div>
+
+                {% if user.company and user.company.jobs.all %}
+                    <div class="row g-3">
+                        {% for job in user.company.jobs.all %}
+                            <div class="col-md-12">
+                                <div class="p-3 bg-dark bg-opacity-50 rounded-3 border border-secondary d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <h5 class="fw-bold text-light mb-1">{{ job.title }}</h5>
+                                        <span class="badge bg-secondary me-2">{{ job.location }}</span>
+                                        <span class="badge bg-info text-dark">{{ job.get_job_type_display }}</span>
+                                    </div>
+                                    <div class="d-flex align-items-center gap-2">
+                                        <a href="{% url 'jobs:job_detail' job.pk %}" class="btn btn-outline-light btn-sm rounded-pill px-3">
+                                            Ko'rish
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <div class="text-center py-4">
+                        <p class="text-light opacity-75 fs-5">Siz hali hech qanday vakansiya e'lon qilmadingiz.</p>
+                        <a href="{% url 'jobs:job_create' %}" class="btn btn-warning rounded-pill px-4 fw-bold text-dark">
+                            Birinchi vakansiyani e'lon qilish 🚀
+                        </a>
+                    </div>
+                {% endif %}
+            </div>
+
+            {% else %}
+            <!-- ================= ISH IZLOVCHI (NOMZOD) PANELI ================= -->
+
             <!-- PROFIL KARTASI -->
             <div class="dashboard-card mb-4 text-white">
                 <div class="d-flex flex-column flex-md-row align-items-center gap-4 text-center text-md-start">
-                    
-                    <!-- Avatar / Rasm -->
                     <div class="flex-shrink-0">
                         {% if user.avatar %}
-                            <img src="{{ user.avatar.url }}" alt="Profile Photo" class="rounded-circle border border-3 border-warning shadow" style="width: 105px; height: 105px; object-fit: cover;">
+                            <img src="{{ user.avatar.url }}" alt="Profile Photo" class="rounded-circle border border-3 border-warning" style="width: 90px; height: 90px; object-fit: cover;">
                         {% else %}
-                            <div class="avatar-circle">
+                            <div class="bg-warning text-dark rounded-circle d-flex align-items-center justify-content-center fw-bold fs-2" style="width: 90px; height: 90px;">
                                 {{ user.username|slice:":1"|upper }}
                             </div>
                         {% endif %}
@@ -37,13 +121,13 @@
                                 <i class="bi bi-telephone-fill me-1"></i> {{ user.phone_number }}
                             </p>
                         {% endif %}
-                        <span class="badge badge-honey">
-                            <i class="bi bi-briefcase me-1"></i> {{ resume.title }}
+                        <span class="badge bg-warning text-dark">
+                            <i class="bi bi-briefcase me-1"></i> {{ resume.title|default:"Nomzod" }}
                         </span>
                     </div>
 
                     <div>
-                        <a href="{% url 'accounts:edit_resume' %}" class="btn btn-warning rounded-pill px-4 py-2 fw-bold text-dark shadow">
+                        <a href="{% url 'accounts:edit_resume' %}" class="btn btn-warning rounded-pill px-4 py-2 fw-bold text-dark">
                             <i class="bi bi-pencil-square me-1"></i> Tahrirlash
                         </a>
                     </div>
@@ -64,7 +148,7 @@
                 <div class="row g-4">
                     <!-- To'liq Ism-sharif -->
                     <div class="col-md-6">
-                        <h6 class="text-warning text-uppercase small fw-bold">To'liq ism-sharif</h6>
+                        <h6 class="text-warning text-uppercase small fw-bold">To'liq Ism-sharif</h6>
                         <p class="fs-5 fw-semibold">{{ resume.full_name|default:"Ko'rsatilmadi" }}</p>
                     </div>
 
@@ -77,7 +161,7 @@
                     <!-- Telefon raqam -->
                     <div class="col-md-6">
                         <h6 class="text-warning text-uppercase small fw-bold">Telefon (Rezyume)</h6>
-                        <p class="fs-6">{{ resume.phone|default:user.phone_number|default:"Ko'rsatilmadi" }}</p>
+                        <p class="fs-6">{{ resume.phone_number|default:user.phone_number|default:"Ko'rsatilmadi" }}</p>
                     </div>
 
                     <!-- Yashash manzili -->
@@ -111,18 +195,18 @@
                     </div>
 
                     <!-- GitHub va LinkedIn tugmalari -->
-                    {% if resume.github_link or resume.linkedin_link %}
+                    {% if resume.github or resume.linkedin %}
                         <div class="col-md-12 border-top border-secondary pt-3 mt-3">
                             <h6 class="text-warning text-uppercase small fw-bold mb-3">Ijtimoiy tarmoqlar va havolalar</h6>
                             <div class="d-flex flex-wrap gap-3">
-                                {% if resume.github_link %}
-                                    <a href="{{ resume.github_link }}" target="_blank" class="btn btn-outline-light rounded-pill px-4">
+                                {% if resume.github %}
+                                    <a href="{{ resume.github }}" target="_blank" class="btn btn-outline-light rounded-pill px-4">
                                         <i class="bi bi-github me-2"></i>GitHub Profil
                                     </a>
                                 {% endif %}
 
-                                {% if resume.linkedin_link %}
-                                    <a href="{{ resume.linkedin_link }}" target="_blank" class="btn btn-outline-primary rounded-pill px-4">
+                                {% if resume.linkedin %}
+                                    <a href="{{ resume.linkedin }}" target="_blank" class="btn btn-outline-primary rounded-pill px-4">
                                         <i class="bi bi-linkedin me-2"></i>LinkedIn Profil
                                     </a>
                                 {% endif %}
@@ -131,6 +215,7 @@
                     {% endif %}
                 </div>
             </div>
+            {% endif %}
 
         </div>
     </div>

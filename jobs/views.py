@@ -1,10 +1,10 @@
-from django.shortcuts import render
-from django.db.models import Q
 from django.shortcuts import get_object_or_404, render
+from django.db.models import Q
 from .models import Category, Company, Job
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect
-from .forms import JobForm
+from django.contrib import messages
+from .forms import JobForm, CompanyForm
 
 def home_view(request):
     return render(request, 'base.html')
@@ -65,9 +65,13 @@ def job_detail(request, pk):
 @login_required
 def job_create(request):
     """Yangi vakansiya yaratish"""
-    # Foydalanuvchiga bog'langan kompaniyalik tekshiruvi
-    if not hasattr(request.user, "company"):
+    if request.user.role != 'EMPLOYER':
         return redirect("jobs:job_list")
+
+    # Agar kompaniyasi bo'lmasa, uni kompaniya yaratish sahifasiga yuboramiz!
+    if not hasattr(request.user, "company"):
+        messages.warning(request, "Vakansiya joylashdan oldin kompaniya profilingizni to'ldiring!")
+        return redirect("jobs:company_edit")
 
     if request.method == "POST":
         form = JobForm(request.POST)
@@ -80,3 +84,30 @@ def job_create(request):
         form = JobForm()
 
     return render(request, "jobs/job_form.html", {"form": form})
+
+
+
+
+@login_required
+def company_edit(request):
+    """Ish beruvchi uchun kompaniya profilini yaratish va tahrirlash"""
+    if request.user.role != 'EMPLOYER':
+        messages.error(request, "Bu sahifa faqat ish beruvchilar uchun!")
+        return redirect('accounts:dashboard')
+
+    # Foydalanuvchida kompaniya bor-yo'qligini tekshiramiz
+    company = getattr(request.user, 'company', None)
+
+    if request.method == 'POST':
+        form = CompanyForm(request.POST, request.FILES, instance=company)
+        if form.is_valid():
+            comp = form.save(commit=False)
+            comp.owner = request.user  # Kompaniya egasini biriktiramiz
+            comp.save()
+            messages.success(request, "Kompaniya ma'lumotlari muvaffaqiyatli saqlandi!")
+            return redirect('accounts:dashboard')
+    else:
+        form = CompanyForm(instance=company)
+
+    return render(request, 'jobs/company_form.html', {'form': form, 'company': company})
+

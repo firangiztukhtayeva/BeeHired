@@ -51,19 +51,32 @@ def logout_view(request):
 
 @login_required
 def profile_dashboard(request):
-    # Foydalanuvchida rezyume bor-yo'qligini tekshiramiz yoki yaratamiz
-    resume, created = Resume.objects.get_or_create(
-        user=request.user,
-        defaults={
-            "full_name": request.user.get_full_name() or request.user.username,
-            "title": "Dasturchi / Mutaxassis",
-        },
-    )
-
+    user = request.user
     context = {
-        "user": request.user,
-        "resume": resume,
+        'user': user,
     }
+
+    # Agar foydalanuvchi Ish beruvchi bo'lsa
+    if user.role == 'EMPLOYER':
+        # Ish beruvchining kompaniyasi bor-yo'qligini tekshiramiz (bo'lsa olamiz)
+        company = getattr(user, 'company', None)
+        context['company'] = company
+        if company:
+            context['jobs'] = company.jobs.all()
+        else:
+            context['jobs'] = []
+    
+    # Agar foydalanuvchi Ish izlovchi bo'lsa
+    else:
+        resume, created = Resume.objects.get_or_create(
+            user=user,
+            defaults={
+                "full_name": user.get_full_name() or user.username,
+                "title": "Dasturchi / Mutaxassis",
+            }
+        )
+        context['resume'] = resume
+
     return render(request, "accounts/dashboard.html", context)
 
 @login_required

@@ -141,7 +141,7 @@
             </h2>
             
             <p class="text-light fs-5 fst-italic mx-auto" style="max-width: 550px; opacity: 0.9;">
-                Qanotingizni qoqib turing, eng zo'r vakansiyalar tomon uchamiz!
+                Orzudagi ish va kuchli mutaxassislar birlashadigan maskan! 🍯
             </p>
         </div>
     </div>
@@ -167,11 +167,27 @@
                     </li>
 
                     {% if user.is_authenticated %}
-                        <li class="nav-item">
-                            <a class="nav-link text-white fw-semibold" href="{% url 'accounts:dashboard' %}">
-                                <i class="bi bi-person-badge-fill text-info me-1"></i> Profilim
-                            </a>
-                        </li>
+                        {% if user.role == 'employer' %}
+                            <!-- ISH BERUVCHI UCHUN MENYU -->
+                            <li class="nav-item">
+                                <a class="btn btn-warning btn-sm rounded-pill px-3 fw-bold text-dark" href="{% url 'jobs:job_create' %}">
+                                    <i class="bi bi-plus-circle-fill me-1"></i> Vakansiya e'lon qilish
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-white fw-semibold" href="{% url 'accounts:dashboard' %}">
+                                    <i class="bi bi-building text-info me-1"></i> Kabinet
+                                </a>
+                            </li>
+                        {% else %}
+                            <!-- ISH IZLOVCHI UCHUN MENYU -->
+                            <li class="nav-item">
+                                <a class="nav-link text-white fw-semibold" href="{% url 'accounts:dashboard' %}">
+                                    <i class="bi bi-person-badge-fill text-info me-1"></i> Profilim
+                                </a>
+                            </li>
+                        {% endif %}
+
                         <li class="nav-item">
                             <a class="btn btn-outline-warning btn-sm rounded-pill px-3 ms-lg-2" href="{% url 'accounts:logout' %}">
                                 Chiqish
@@ -189,6 +205,7 @@
             </div>
         </div>
     </nav>
+
     {% block hero %}
     <!-- 3. BUZZ AI ASSISTANT BANNER -->
     <div class="container mt-4">
@@ -202,26 +219,30 @@
                     <small class="text-muted" style="font-size: 0.75rem;">AI Mascot</small>
                 </div>
                 <p class="mb-0 fs-6">
-                    {% if user.is_authenticated %}
-                        "Hormang, <b>{{ user.username }}</b>! Bugun eng shirin va maza asalni birga topamizmi? 🍯"
-                    {% else %}
-                        "Salom, do'stim! Asalga yetishish uchun avval inimizga ro'yxatdan o'tib olamizmi? 😉"
-                    {% endif %}
-                </p>
+    {% if user.is_authenticated %}
+        {% if user.role == 'EMPLOYER' %}
+            "Hormang, <b>{{ user.username }}</b>! Bugun jamoangiz uchun eng kuchli kadrlarni topamizmi? 💼"
+        {% else %}
+            "Hormang, <b>{{ user.username }}</b>! Bugun eng shirin va maza asalni birga topamizmi? 🍯"
+        {% endif %}
+    {% else %}
+        "Salom, do'stim! Asalga yetishish yoki eng zo'r mutaxassislarni topish uchun avval inimizga ro'yxatdan o'tib olamizmi? 😉"
+    {% endif %}
+</p>
             </div>
         </div>
     </div>
 
     <!-- ASOSIY SAHIFADAGI JUDA KATTA LOGO VA SHIOR BLOKI -->
-<div class="container-fluid text-center hero-branding-block my-4">
-    <div class="d-flex flex-column align-items-center justify-content-center">
-        <img src="{% static 'images/bh-logo.png' %}" alt="BH Big Logo" class="hero-big-logo mb-0" onerror="this.style.display='none'">
-        <p class="hero-slogan-text mb-3">
-            Qanotingizni qoqib turing, eng zo'r vakansiyalar tomon <br> uchamiz!
-        </p>
+    <div class="container-fluid text-center hero-branding-block my-4">
+        <div class="d-flex flex-column align-items-center justify-content-center">
+            <img src="{% static 'images/bh-logo.png' %}" alt="BH Big Logo" class="hero-big-logo mb-0" onerror="this.style.display='none'">
+            <p class="hero-slogan-text mb-3">
+                Orzudagi ish va kuchli mutaxassislar <br> bir joyda!
+            </p>
+        </div>
     </div>
-</div>
-{% endblock hero %}
+    {% endblock hero %}
 
     <!-- MAIN CONTENT -->
     <main class="container my-4">

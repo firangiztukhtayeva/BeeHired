@@ -5,7 +5,7 @@ from .models import CustomUser,  Resume
 class CustomUserCreationForm(UserCreationForm):
     role = forms.ChoiceField(
         choices=CustomUser.Role.choices,
-        widget=forms.Select(attrs={'class': 'form-select'}),
+        widget=forms.Select(attrs={'class': 'form-select form-control'}),
         label="Siz kimsiz?"
     )
 
@@ -14,8 +14,6 @@ class CustomUserCreationForm(UserCreationForm):
         fields = ('username', 'email', 'role', 'phone_number')
         
         
-from django import forms
-from .models import Resume
 
 class ResumeForm(forms.ModelForm):
     class Meta:
@@ -50,3 +48,7 @@ class ProfileUpdateForm(forms.ModelForm):
             'avatar': forms.FileInput(attrs={'class': 'form-control', 'accept': 'image/*'}),
             'phone_number': forms.TextInput(attrs={'class': 'form-control', 'placeholder': '+998 90 123 45 67'}),
         }
+        
+        
+        
+        
