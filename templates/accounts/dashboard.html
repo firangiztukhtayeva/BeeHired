@@ -56,7 +56,7 @@
             </div>
 
             <!-- KOMPANIYA VAKANSIYALARI -->
-            <div class="dashboard-card text-white">
+            <div class="dashboard-card mb-4 text-white">
                 <div class="d-flex justify-content-between align-items-center mb-4 pb-2 border-bottom border-secondary">
                     <h4 class="fw-bold m-0 text-warning">
                         <i class="bi bi-briefcase-fill me-2"></i>E'lon qilingan vakansiyalar
@@ -92,6 +92,63 @@
                             Birinchi vakansiyani e'lon qilish 🚀
                         </a>
                     </div>
+                {% endif %}
+            </div>
+
+            <!-- KELIB TUSHGAN ARIZALAR (YANGI QO'SHILGAN BLOK) -->
+            <div class="dashboard-card text-white">
+                <div class="d-flex justify-content-between align-items-center mb-4 pb-2 border-bottom border-secondary">
+                    <h4 class="fw-bold m-0 text-warning">
+                        <i class="bi bi-inbox-fill me-2"></i>Kelib tushgan arizalar
+                    </h4>
+                </div>
+
+                {% if applications %}
+                    <div class="table-responsive">
+                        <table class="table table-dark table-hover align-middle">
+                            <thead>
+                                <tr>
+                                    <th>Nomzod</th>
+                                    <th>Vakansiya</th>
+                                    <th>Sana</th>
+                                    <th>Status</th>
+                                    <th>Amallar</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for app in applications %}
+                                    <tr>
+                                        <td class="fw-bold text-warning">
+                                            {{ app.seeker.get_full_name|default:app.seeker.username }}
+                                        </td>
+                                        <td>{{ app.job.title }}</td>
+                                        <td class="small opacity-75">{{ app.applied_at|date:"d.m.Y H:i" }}</td>
+                                        <td>
+                                            {% if app.status == 'ACCEPTED' %}
+                                                <span class="badge bg-success">Qabul qilindi</span>
+                                            {% elif app.status == 'REJECTED' %}
+                                                <span class="badge bg-danger">Rad etildi</span>
+                                            {% else %}
+                                                <span class="badge bg-warning text-dark">Ko'rib chiqilmoqda</span>
+                                            {% endif %}
+                                        </td>
+                                        <td>
+                                            <div class="btn-group">
+                                                <a href="{% url 'applications:update_status' app.pk 'ACCEPTED' %}" class="btn btn-sm btn-outline-success" title="Qabul qilish">
+                                                    <i class="bi bi-check-lg"></i>
+                                                </a>
+                                                <a href="{% url 'applications:update_status' app.pk 'REJECTED' %}" class="btn btn-sm btn-outline-danger" title="Rad etish">
+                                                    <i class="bi bi-x-lg"></i>
+                                                </a>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                {% else %}
+                    <p class="text-light opacity-75 text-center my-3">Hali vakansiyalaringizga arizalar kelib tushgani yo'q.</p>
                 {% endif %}
             </div>
 
@@ -132,6 +189,52 @@
                         </a>
                     </div>
                 </div>
+            </div>
+
+            <!-- TOPSHIRILGAN ARIZALAR (YANGI QO'SHILGAN BLOK) -->
+            <div class="dashboard-card mb-4 text-white">
+                <div class="d-flex justify-content-between align-items-center mb-4 pb-2 border-bottom border-secondary">
+                    <h4 class="fw-bold m-0 text-warning">
+                        <i class="bi bi-send-fill me-2"></i>Mening Arizalarim
+                    </h4>
+                </div>
+
+                {% if my_applications %}
+                    <div class="table-responsive">
+                        <table class="table table-dark table-hover align-middle">
+                            <thead>
+                                <tr>
+                                    <th>Vakansiya</th>
+                                    <th>Topshirilgan sana</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for app in my_applications %}
+                                    <tr>
+                                        <td class="fw-bold">
+                                            <a href="{% url 'jobs:job_detail' app.job.pk %}" class="text-warning text-decoration-none">
+                                                {{ app.job.title }}
+                                            </a>
+                                        </td>
+                                        <td class="small opacity-75">{{ app.applied_at|date:"d.m.Y H:i" }}</td>
+                                        <td>
+                                            {% if app.status == 'ACCEPTED' %}
+                                                <span class="badge bg-success">Qabul qilindi 🎉</span>
+                                            {% elif app.status == 'REJECTED' %}
+                                                <span class="badge bg-danger">Rad etildi</span>
+                                            {% else %}
+                                                <span class="badge bg-warning text-dark">Ko'rib chiqilmoqda</span>
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                {% else %}
+                    <p class="text-light opacity-75 text-center my-3">Siz hali hech qaysi vakansiyaga ariza topshirmadingiz.</p>
+                {% endif %}
             </div>
 
             <!-- REZYUME MA'LUMOTLARI KARTASI -->

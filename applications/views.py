@@ -35,3 +35,20 @@ def apply_job(request, pk):
     )
     messages.success(request, "Arizangiz va rezyumengiz muvaffaqiyatli topshirildi! 🚀")
     return redirect('jobs:job_detail', pk=pk)
+
+
+@login_required
+def update_application_status(request, pk, status):
+    application = get_object_or_404(Application, pk=pk)
+    
+    # Faqat vakansiya egasi (Ish beruvchi) statusni o'zgartira oladi
+    if application.job.employer != request.user:
+        messages.error(request, "Sizda ushbu arizani o'zgartirish huquqi yo'q!")
+        return redirect('accounts:dashboard')
+
+    if status in ['ACCEPTED', 'REJECTED', 'PENDING']:
+        application.status = status
+        application.save()
+        messages.success(request, f"Ariza holati muvaffaqiyatli o'zgartirildi: {application.get_status_display()}")
+    
+    return redirect('accounts:dashboard')

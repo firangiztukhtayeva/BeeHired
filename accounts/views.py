@@ -6,6 +6,8 @@ from .forms import CustomUserCreationForm
 from django.contrib.auth.decorators import login_required
 from .models import Resume
 from .forms import ResumeForm, ProfileUpdateForm
+from jobs.models import Job
+from applications.models import Application
 
 def register_view(request):
     if request.user.is_authenticated:
@@ -97,3 +99,36 @@ def edit_resume(request):
         'form': resume_form,
         'profile_form': profile_form
     })
+    
+
+
+
+@login_required
+def dashboard_view(request):
+    user = request.user
+    user_role = str(getattr(user, 'role', '')).upper()
+
+    context = {}
+
+    if user_role == 'EMPLOYER' or getattr(user, 'is_employer', False):
+        # Ish beruvchining vakansiyalari
+        my_jobs = Job.objects.filter(employer=user).order_by('-created_at')
+        # Kelib tushgan tumandagi arizalar
+        applications = Application.objects.filter(job__in=my_jobs).select_related('job', 'seeker', 'resume').order_by('-applied_at')
+        
+        context.update({
+            'my_jobs': my_jobs,
+            'applications': applications,
+        })
+    else:
+        # Nomzodning rezyumesi
+        resume = Resume.objects.filter(user=user).first()
+        # Nomzod topshirgan arizalar
+        my_applications = Application.objects.filter(seeker=user).select_related('job', 'job__employer').order_by('-applied_at')
+        
+        context.update({
+            'resume': resume,
+            'my_applications': my_applications,
+        })
+
+    return render(request, 'accounts/dashboard.html', context)
