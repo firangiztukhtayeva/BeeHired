@@ -1,6 +1,6 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
-from .models import CustomUser,  Resume
+from .models import CustomUser,  Resume, Company
 
 class CustomUserCreationForm(UserCreationForm):
     role = forms.ChoiceField(
@@ -51,4 +51,13 @@ class ProfileUpdateForm(forms.ModelForm):
         
         
         
-        
+class CompanyForm(forms.ModelForm):
+    class Meta:
+        model = Company
+        fields = ['name', 'logo', 'description', 'website', 'location']
+        widgets = {
+            'name': forms.TextInput(attrs={'class': 'form-control bg-dark text-white border-secondary'}),
+            'description': forms.Textarea(attrs={'class': 'form-control bg-dark text-white border-secondary', 'rows': 4}),
+            'website': forms.URLInput(attrs={'class': 'form-control bg-dark text-white border-secondary'}),
+            'location': forms.TextInput(attrs={'class': 'form-control bg-dark text-white border-secondary'}),
+        }        
