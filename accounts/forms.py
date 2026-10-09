@@ -1,6 +1,7 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
-from .models import CustomUser,  Resume, Company
+from .models import CustomUser,  Resume
+from jobs.models import Company
 
 class CustomUserCreationForm(UserCreationForm):
     role = forms.ChoiceField(

@@ -3,7 +3,7 @@ from django.contrib.auth import login, logout
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-
+from jobs.models import Job, Company
 from .forms import CustomUserCreationForm, ResumeForm, ProfileUpdateForm
 from .models import Resume
 from jobs.models import Job
