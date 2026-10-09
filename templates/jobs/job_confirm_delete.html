@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block title %}Vakansiyani o'chirish - BeeHired{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card bg-dark text-white border-danger rounded-4 p-4 shadow-lg text-center">
+                <i class="bi bi-exclamation-triangle-fill text-danger display-1 mb-3"></i>
+                <h3 class="fw-bold text-white mb-3">Vakansiyani o'chirishni tasdiqlaysizmi?</h3>
+                <p class="text-light opacity-75 mb-4">
+                    "<strong>{{ job.title }}</strong>" vakansiyasini o'chirmoqchisiz. Bu amalni ortga qaytarib bo'lmaydi!
+                </p>
+
+                <form method="post" class="d-flex justify-content-center gap-3">
+                    {% csrf_token %}
+                    <a href="{% url 'accounts:dashboard' %}" class="btn btn-outline-light rounded-pill px-4">
+                        Bekor qilish
+                    </a>
+                    <button type="submit" class="btn btn-danger rounded-pill px-4 fw-bold">
+                        Ha, o'chirilsin 🗑️
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

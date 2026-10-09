@@ -77,10 +77,19 @@
                                         <span class="badge bg-info text-dark">{{ job.get_job_type_display }}</span>
                                     </div>
                                     <div class="d-flex align-items-center gap-2">
-                                        <a href="{% url 'jobs:job_detail' job.pk %}" class="btn btn-outline-light btn-sm rounded-pill px-3">
-                                            Ko'rish
-                                        </a>
-                                    </div>
+    <!-- Ko'rish -->
+    <a href="{% url 'jobs:job_detail' job.pk %}" class="btn btn-outline-light btn-sm rounded-pill px-3" title="Ko'rish">
+        <i class="bi bi-eye"></i> Ko'rish
+    </a>
+    <!-- Tahrirlash -->
+    <a href="{% url 'jobs:job_edit' job.pk %}" class="btn btn-outline-warning btn-sm rounded-pill px-3" title="Tahrirlash">
+        <i class="bi bi-pencil"></i> Tahrirlash
+    </a>
+    <!-- O'chirish -->
+    <a href="{% url 'jobs:job_delete' job.pk %}" class="btn btn-outline-danger btn-sm rounded-pill px-3" title="O'chirish">
+        <i class="bi bi-trash"></i> O'chirish
+    </a>
+</div>
                                 </div>
                             </div>
                         {% endfor %}

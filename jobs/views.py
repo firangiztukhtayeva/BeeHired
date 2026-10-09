@@ -118,3 +118,43 @@ def company_edit(request):
 
     return render(request, 'jobs/company_form.html', {'form': form, 'company': company})
 
+
+
+@login_required
+def job_edit(request, pk):
+    """Vakansiyani tahrirlash"""
+    job = get_object_or_404(Job, pk=pk)
+    
+    # Faqat vakansiya egasi tahrirlashi mumkin
+    if hasattr(job, 'employer') and job.employer != request.user:
+        messages.error(request, "Sizda ushbu vakansiyani tahrirlash huquqi yo'q!")
+        return redirect('accounts:dashboard')
+
+    if request.method == "POST":
+        form = JobForm(request.POST, instance=job)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Vakansiya muvaffaqiyatli yangilandi! ✨")
+            return redirect('jobs:job_detail', pk=job.pk)
+    else:
+        form = JobForm(instance=job)
+
+    return render(request, 'jobs/job_form.html', {'form': form, 'is_edit': True, 'job': job})
+
+
+@login_required
+def job_delete(request, pk):
+    """Vakansiyani o'chirish"""
+    job = get_object_or_404(Job, pk=pk)
+    
+    # Faqat vakansiya egasi o'chira oladi
+    if hasattr(job, 'employer') and job.employer != request.user:
+        messages.error(request, "Sizda ushbu vakansiyani o'chirish huquqi yo'q!")
+        return redirect('accounts:dashboard')
+
+    if request.method == "POST":
+        job.delete()
+        messages.success(request, "Vakansiya o'chirildi.")
+        return redirect('accounts:dashboard')
+
+    return render(request, 'jobs/job_confirm_delete.html', {'job': job})
