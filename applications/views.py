@@ -3,7 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from jobs.models import Job
 from accounts.models import Resume
-from .models import Application
+from .models import Application ,SavedJob
 
 @login_required
 def apply_job(request, pk):
@@ -40,9 +40,17 @@ def apply_job(request, pk):
 @login_required
 def update_application_status(request, pk, status):
     application = get_object_or_404(Application, pk=pk)
-    
+    job = application.job
+
     # Faqat vakansiya egasi (Ish beruvchi) statusni o'zgartira oladi
-    if application.job.employer != request.user:
+    # Xavfsiz tekshiruv: job.company yoki job.employer orqali
+    is_owner = False
+    if hasattr(job, 'company') and job.company:
+        is_owner = (getattr(job.company, 'owner', None) == request.user or getattr(job.company, 'user', None) == request.user)
+    elif hasattr(job, 'employer'):
+        is_owner = (job.employer == request.user)
+
+    if not is_owner and not request.user.is_superuser:
         messages.error(request, "Sizda ushbu arizani o'zgartirish huquqi yo'q!")
         return redirect('accounts:dashboard')
 
@@ -52,3 +60,19 @@ def update_application_status(request, pk, status):
         messages.success(request, f"Ariza holati muvaffaqiyatli o'zgartirildi: {application.get_status_display()}")
     
     return redirect('accounts:dashboard')
+
+
+
+@login_required
+def toggle_save_job(request, pk):
+    """Vakansiyani saqlanganlarga qo'shish yoki olib tashlash"""
+    job = get_object_or_404(Job, pk=pk)
+    saved_job, created = SavedJob.objects.get_or_create(user=request.user, job=job)
+
+    if not created:
+        saved_job.delete()
+        messages.info(request, "Vakansiya saqlanganlardan olib tashlandi.")
+    else:
+        messages.success(request, "Vakansiya saqlanganlarga qo'shildi! ⭐")
+
+    return redirect('jobs:job_detail', pk=pk)

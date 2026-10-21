@@ -120,13 +120,36 @@ def company_edit(request):
 
 
 
+
+@login_required
+def job_delete(request, pk):
+    """Vakansiyani o'chirish (faqat vakansiya egasi yoki superuser)"""
+    job = get_object_or_404(Job, pk=pk)
+
+    user_company = getattr(request.user, 'company', None)
+    is_owner = user_company is not None and job.company_id == user_company.pk
+
+    if not is_owner and not request.user.is_superuser:
+        messages.error(request, "Sizda ushbu vakansiyani o'chirish huquqi yo'q!")
+        return redirect('accounts:dashboard')
+
+    if request.method == "POST":
+        job.delete()
+        messages.success(request, "Vakansiya muvaffaqiyatli o'chirildi!")
+        return redirect('accounts:dashboard')
+
+    return render(request, 'jobs/job_confirm_delete.html', {'job': job})
+
+
 @login_required
 def job_edit(request, pk):
     """Vakansiyani tahrirlash"""
     job = get_object_or_404(Job, pk=pk)
     
-    # Faqat vakansiya egasi tahrirlashi mumkin
-    if hasattr(job, 'employer') and job.employer != request.user:
+    user_company = getattr(request.user, 'company', None)
+    is_owner = (job.company == user_company) if user_company else False
+
+    if not is_owner and not request.user.is_superuser:
         messages.error(request, "Sizda ushbu vakansiyani tahrirlash huquqi yo'q!")
         return redirect('accounts:dashboard')
 
@@ -140,21 +163,3 @@ def job_edit(request, pk):
         form = JobForm(instance=job)
 
     return render(request, 'jobs/job_form.html', {'form': form, 'is_edit': True, 'job': job})
-
-
-@login_required
-def job_delete(request, pk):
-    """Vakansiyani o'chirish"""
-    job = get_object_or_404(Job, pk=pk)
-    
-    # Faqat vakansiya egasi o'chira oladi
-    if hasattr(job, 'employer') and job.employer != request.user:
-        messages.error(request, "Sizda ushbu vakansiyani o'chirish huquqi yo'q!")
-        return redirect('accounts:dashboard')
-
-    if request.method == "POST":
-        job.delete()
-        messages.success(request, "Vakansiya o'chirildi.")
-        return redirect('accounts:dashboard')
-
-    return render(request, 'jobs/job_confirm_delete.html', {'job': job})

@@ -69,30 +69,33 @@
                 {% if user.company and user.company.jobs.all %}
                     <div class="row g-3">
                         {% for job in user.company.jobs.all %}
-                            <div class="col-md-12">
-                                <div class="p-3 bg-dark bg-opacity-50 rounded-3 border border-secondary d-flex justify-content-between align-items-center">
-                                    <div>
-                                        <h5 class="fw-bold text-light mb-1">{{ job.title }}</h5>
-                                        <span class="badge bg-secondary me-2">{{ job.location }}</span>
-                                        <span class="badge bg-info text-dark">{{ job.get_job_type_display }}</span>
-                                    </div>
-                                    <div class="d-flex align-items-center gap-2">
-    <!-- Ko'rish -->
-    <a href="{% url 'jobs:job_detail' job.pk %}" class="btn btn-outline-light btn-sm rounded-pill px-3" title="Ko'rish">
-        <i class="bi bi-eye"></i> Ko'rish
-    </a>
-    <!-- Tahrirlash -->
-    <a href="{% url 'jobs:job_edit' job.pk %}" class="btn btn-outline-warning btn-sm rounded-pill px-3" title="Tahrirlash">
-        <i class="bi bi-pencil"></i> Tahrirlash
-    </a>
-    <!-- O'chirish -->
-    <a href="{% url 'jobs:job_delete' job.pk %}" class="btn btn-outline-danger btn-sm rounded-pill px-3" title="O'chirish">
-        <i class="bi bi-trash"></i> O'chirish
-    </a>
-</div>
-                                </div>
-                            </div>
-                        {% endfor %}
+    <div class="col-md-12">
+        <div class="p-3 bg-dark bg-opacity-50 rounded-3 border border-secondary d-flex justify-content-between align-items-center mb-3">
+            <div>
+                <h5 class="fw-bold text-light mb-1">{{ job.title }}</h5>
+                <span class="badge bg-secondary me-2">{{ job.location }}</span>
+                <span class="badge bg-info text-dark">{{ job.get_job_type_display }}</span>
+            </div>
+            
+            <div class="d-flex align-items-center gap-2">
+                <!-- Ko'rish -->
+                <a href="{% url 'jobs:job_detail' job.pk %}" class="btn btn-outline-light btn-sm rounded-pill px-3" title="Ko'rish">
+                    <i class="bi bi-eye"></i> Ko'rish
+                </a>
+                
+                <!-- Tahrirlash -->
+                <a href="{% url 'jobs:job_edit' job.pk %}" class="btn btn-outline-warning btn-sm rounded-pill px-3" title="Tahrirlash">
+                    <i class="bi bi-pencil"></i> Tahrirlash
+                </a>
+                
+                <!-- O'chirish (Do'g'ri havola) -->
+                <a href="{% url 'jobs:job_delete' job.pk %}" class="btn btn-outline-danger btn-sm rounded-pill px-3" title="O'chirish">
+                    <i class="bi bi-trash"></i> O'chirish
+                </a>
+            </div>
+        </div>
+    </div>
+{% endfor %}
                     </div>
                 {% else %}
                     <div class="text-center py-4">

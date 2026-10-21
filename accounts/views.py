@@ -64,7 +64,12 @@ def dashboard_view(request):
     if user_role == 'EMPLOYER' or getattr(user, 'is_employer', False):
         # Ish beruvchining kompaniyasi va e'lon qilgan vakansiyalari
         company = getattr(user, 'company', None)
-        my_jobs = Job.objects.filter(company=company).order_by('-created_at') if company else Job.objects.filter(employer=user).order_by('-created_at')
+        
+        # Job modelida employer maydoni yo'qligi uchun faqat company orqali sarlaymiz
+        if company:
+            my_jobs = Job.objects.filter(company=company).order_by('-created_at')
+        else:
+            my_jobs = Job.objects.none()
         
         # Kelib tushgan arizalar
         applications = Application.objects.filter(job__in=my_jobs).select_related('job', 'seeker', 'resume').order_by('-applied_at')
@@ -76,7 +81,7 @@ def dashboard_view(request):
             'applications': applications,
         })
     else:
-        # Ish izlovchining rezyumesi (bo'lmasa avtomatik yaratamiz)
+        # Ish izlovchining rezyumesi
         resume, created = Resume.objects.get_or_create(
             user=user,
             defaults={
@@ -84,7 +89,6 @@ def dashboard_view(request):
                 "title": "Dasturchi / Mutaxassis",
             }
         )
-        # Nomzod topshirgan arizalar
         my_applications = Application.objects.filter(seeker=user).select_related('job', 'job__company').order_by('-applied_at')
 
         context.update({
@@ -94,7 +98,6 @@ def dashboard_view(request):
         })
 
     return render(request, 'accounts/dashboard.html', context)
-
 
 @login_required
 def edit_resume(request):
